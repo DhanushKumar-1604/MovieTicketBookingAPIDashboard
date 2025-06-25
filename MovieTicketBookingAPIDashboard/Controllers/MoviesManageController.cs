@@ -18,7 +18,11 @@ namespace MovieTicketBookingAPIDashboard.Controllers
             _moviesManageService = manageService;
         }
 
-
+        /// <summary>
+        ///   Add a new movie to the database.
+        /// </summary>
+        /// <param name="moviesModel"></param>
+        /// <returns> return the action response once added return success or false </returns>
         [HttpPost("AddMovies")]
         public async Task<ActionResult<ActionResponse>> AddMovies(MoviesModel moviesModel)
         {
@@ -47,8 +51,12 @@ namespace MovieTicketBookingAPIDashboard.Controllers
             {
                 return StatusCode(500);
             }
-        } 
+        }
 
+        /// <summary>
+        ///    Get all movies from the database.
+        /// </summary>
+        /// <returns> returns the Movies list in GetAllMovieResponse </returns>
         [HttpGet("GetAllMovies")]
         public async Task<ActionResult<GetAllMoviesResponse>?> GetAllMoviesList() {
             try
@@ -87,6 +95,11 @@ namespace MovieTicketBookingAPIDashboard.Controllers
 
         }
 
+        /// <summary>
+        ///    Get a movie by its ID from the database.
+        /// </summary>
+        /// <param name="movieId"></param>
+        /// <returns> return the movie detail given id and returns to the GetMovieByIdResponse </returns>
         [HttpGet("GetMovieById")]
         public async Task<ActionResult<GetMovieByIdResponse>?> GetMovieById(int movieId)
         {
