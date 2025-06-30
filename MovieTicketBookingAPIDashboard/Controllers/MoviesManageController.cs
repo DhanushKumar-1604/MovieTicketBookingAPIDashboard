@@ -1,5 +1,6 @@
 ﻿using APIDashboard.Application.Interfaces;
 using APIDashboard.Domain;
+using APIDashboard.Domain.Dto_Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -24,10 +25,18 @@ namespace MovieTicketBookingAPIDashboard.Controllers
         /// <param name="moviesModel"></param>
         /// <returns> return the action response once added return success or false </returns>
         [HttpPost("AddMovies")]
-        public async Task<ActionResult<ActionResponse>> AddMovies(MoviesModel moviesModel)
+        public async Task<ActionResult<ActionResponse>> AddMovies(AddMoviesModelDto addMoviesDtoModel)
         {
             try
             {
+                MoviesModel moviesModel = new MoviesModel
+                {
+                   Title=addMoviesDtoModel.Title,
+                   Genre=addMoviesDtoModel.Genre,
+                   DurationMinutes=addMoviesDtoModel.DurationMinutes,
+                   ReleaseDate=addMoviesDtoModel.ReleaseDate,
+
+                };
                 var result=await _moviesManageService.AddMovies(moviesModel);
                 if (result != 0) 
                 {
@@ -67,7 +76,15 @@ namespace MovieTicketBookingAPIDashboard.Controllers
                 {
                     return Ok(new GetAllMoviesResponse
                     {
-                        MoviesList=new GetAllMoviesList { getAllMovies=result},
+                        MoviesList=new GetAllMoviesList
+                        {
+                            getAllMovies=result.Select(result=> new GetMoviesModelDto
+                            {
+                                MovieId=result.MovieId,
+                                Title=result.Title,
+                                ReleaseDate=result.ReleaseDate
+                            }).ToList()
+                        },
                         ActionResponse=new ActionResponse
                         {
                             Message="Retrive All data Successfully!",
@@ -133,14 +150,12 @@ namespace MovieTicketBookingAPIDashboard.Controllers
                 {
                     return Ok(new GetMovieByIdResponse
                     {
-                        MovieDetails=new GetMovieByIdModel
-                        {
-                            MovieId=response.MovieId,
-                            Title=response.Title,
-                            Genre=response.Genre,
-                            DurationMinutes=response.DurationMinutes,
-                            ReleaseDate=response.ReleaseDate
-                        },
+                       MovieDetails=new GetMoviesModelDto
+                       {
+                           MovieId=response.MovieId,
+                           Title=response.Title,
+                           ReleaseDate=response.ReleaseDate
+                       },
                         ActionResponse=new ActionResponse
                         {
                             Message="Data fetched successfully!",

@@ -1,4 +1,5 @@
 ﻿using APIDashboard.Domain;
+using APIDashboard.Domain.Dto_Model;
 
 namespace MovieTicketBookingAPIDashboard.Models.MoviesManage
 {
@@ -10,6 +11,6 @@ namespace MovieTicketBookingAPIDashboard.Models.MoviesManage
 
     public class GetAllMoviesList()
     {
-        public List<MoviesModel>? getAllMovies { get; set; }
+        public List<GetMoviesModelDto>? getAllMovies { get; set; }
     }
 }
